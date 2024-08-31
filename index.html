@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor de Código ao Vivo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .tabs {
+            display: flex;
+            width: 80%;
+            margin-bottom: 10px;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+            border-bottom: none;
+        }
+        .tab.active {
+            background-color: #fff;
+            border-bottom: 1px solid #fff;
+        }
+        .editor {
+            width: 80%;
+            height: 200px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .editor.active {
+            display: block;
+        }
+        button {
+            margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            flex-grow: 1;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editor de Código ao Vivo</h1>
+    <div class="tabs">
+        <div class="tab active" onclick="openEditor('html')">HTML</div>
+        <div class="tab" onclick="openEditor('css')">CSS</div>
+        <div class="tab" onclick="openEditor('js')">JS</div>
+    </div>
+    <textarea id="htmlEditor" class="editor active" placeholder="Digite seu código HTML aqui..."></textarea>
+    <textarea id="cssEditor" class="editor" placeholder="Digite seu código CSS aqui..."></textarea>
+    <textarea id="jsEditor" class="editor" placeholder="Digite seu código JavaScript aqui..."></textarea>
+    <button onclick="updateIframe()">Criar</button>
+    <iframe id="output"></iframe>
+
+    <script>
+        function openEditor(type) {
+            const editors = document.querySelectorAll('.editor');
+            const tabs = document.querySelectorAll('.tab');
+            editors.forEach(editor => editor.classList.remove('active'));
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            document.getElementById(`${type}Editor`).classList.add('active');
+            document.querySelector(`.tab[onclick="openEditor('${type}')"]`).classList.add('active');
+        }
+
+        function updateIframe() {
+            const htmlContent = document.getElementById('htmlEditor').value;
+            const cssContent = `<style>${document.getElementById('cssEditor').value}</style>`;
+            const jsContent = `<script>${document.getElementById('jsEditor').value}<\/script>`;
+            const iframe = document.getElementById('output');
+
+            iframe.srcdoc = `${htmlContent}${cssContent}${jsContent}`;
+        }
+    </script>
+</body>
+</html>
